@@ -1,5 +1,6 @@
-# text-generation-webui-docker
-text-generation-webui in an NVIDIA/JupyterLab/Anaconda supported environment
+# Anaconda3/GPU-enabled Docker containers for text-generation-webui
+
+[text-generation-webui](oobabooga/text-generation-webui)
 
 Designed to facilitate the operation of Large Language Models, such as LLaMA, llama.cpp, GPT-J, Pythia, OPT, and GALACTICA, through a Gradio web interface. This inclusion is designed to replicate the functionality provided by AUTOMATIC1111/stable-diffusion-webui, integrated into our Docker container stack, aiming at developers who need a web-based interface for text generation tasks.
 

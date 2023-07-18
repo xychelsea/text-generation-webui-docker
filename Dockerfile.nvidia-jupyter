@@ -1,0 +1,86 @@
+# text-generation-webui Dockerfile for Anaconda3 / Miniconda3
+# Copyright (C) 2020-2023  Chelsea E. Manning
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+FROM xychelsea/anaconda3:v23.1.0-gpu
+LABEL description="text-generation-webui GPU Container w/ JupyterLab"
+
+# $ docker build --network=host -t xychelsea/text-generation-webui:latest-gpu-jupyter -f Dockerfile.nvidia-jupyter .
+# $ docker run --rm --gpus=all -it -d -p 7860:7860 -p 8888:8888 xychelsea/text-generation-webui:latest-gpu-jupyter /bin/bash
+# $ docker push xychelsea/text-generation-webui:latest-gpu-jpyter
+
+ENV ANACONDA_ENV=textgen
+ENV PROJECT_GIT_REPO=https://github.com/oobabooga/text-generation-webui
+ENV PROJECT_NAME=text-generation-webui
+ENV PROJECT_PATH=/usr/local/${PROJECT_NAME}
+ENV TEXTGEN_VERSION=v1.2
+
+# Start as root
+USER root
+
+# Update packages
+RUN apt-get update --fix-missing
+
+# Install dependencies
+RUN apt-get install --no-install-recommends --no-install-suggests -y \
+    gcc-11 \
+    git
+
+# Create directory
+RUN mkdir -p ${PROJECT_PATH} \
+    && fix-permissions ${PROJECT_PATH}
+
+# Switch to user "anaconda"
+USER ${ANACONDA_UID}
+WORKDIR ${HOME}
+
+# Update conda env
+RUN conda update -c defaults conda
+
+# add repository to docker image
+RUN git clone ${PROJECT_GIT_REPO} ${PROJECT_PATH} \
+    && git config --global --add safe.directory ${PROJECT_PATH}
+
+# checkout branch
+WORKDIR ${PROJECT_PATH}
+RUN git checkout ${PROJECT_VERSION}
+
+# Add directory to home
+RUN fix-permissions ${PROJECT_PATH} \
+    && ln -s ${PROJECT_PATH} ${HOME}/${PROJECT_NAME}
+
+COPY environment-cuda.yml ${PROJECT_PATH}/environment.yml
+
+# create environment
+RUN conda env create -f ${PROJECT_PATH}/environment.yml
+
+WORKDIR ${PROJECT_PATH}
+
+# Switch back to root
+USER root
+
+# Clean up anaconda
+RUN conda clean -afy
+
+# Clean packages and caches
+RUN apt-get --purge -y autoremove git \
+    && fix-permissions ${HOME} \
+    && fix-permissions ${ANACONDA_PATH}
+
+EXPOSE 7860
+
+# Re-activate user "anaconda"
+USER $ANACONDA_UID
+WORKDIR $HOME

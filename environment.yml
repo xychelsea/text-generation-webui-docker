@@ -1,0 +1,37 @@
+name: textgen
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - pytorch::pytorch=2.0.1
+  - pytorch::torchaudio=2.0.2
+  - pytorch::torchvision=0.15.2
+  - conda-forge::accelerate=0.20.3
+  - conda-forge::colorama=0.4.6
+  - conda-forge::datasets=2.13.1
+  - conda-forge::einops=0.6.1
+  - conda-forge::fastapi=0.100.0
+  - conda-forge::markdown=3.4.3
+  - conda-forge::numpy=1.25.1
+  - conda-forge::pandas=2.0.3
+  - conda-forge::pillow=9.4.0
+  - conda-forge::pip=23.2
+  - pip:
+    - bitsandbytes==0.40.0
+    - flexgen==0.1.7
+    - git+https://github.com/huggingface/peft@03eb378eb914fbee709ff7c86ba5b1d033b89524
+    - gradio_client==0.2.5
+    - gradio==3.33.1
+    - https://github.com/PanQiWei/AutoGPTQ/releases/download/v0.2.2/auto_gptq-0.2.2+cu117-cp310-cp310-linux_x86_64.whl
+    - https://github.com/jllllll/exllama/releases/download/0.0.6/exllama-0.0.6+cu117-cp310-cp310-linux_x86_64.whl
+    - llama-cpp-python==0.1.70
+  - conda-forge::python=3.10.12
+  - conda-forge::pyyaml=6.0
+  - conda-forge::requests=2.31.0
+  - conda-forge::safetensors=0.3.1
+  - conda-forge::scipy=1.11.1
+  - conda-forge::sentencepiece=0.1.99
+  - conda-forge::tensorboard=2.13.0
+  - conda-forge::tqdm=4.65.0
+  - conda-forge::wandb=0.15.5
+  - conda-forge::transformers=4.30.2

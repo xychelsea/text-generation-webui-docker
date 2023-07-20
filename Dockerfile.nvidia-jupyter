@@ -25,7 +25,7 @@ ENV ANACONDA_ENV=textgen
 ENV PROJECT_GIT_REPO=https://github.com/oobabooga/text-generation-webui
 ENV PROJECT_NAME=text-generation-webui
 ENV PROJECT_PATH=/usr/local/${PROJECT_NAME}
-ENV TEXTGEN_VERSION=v1.2
+ENV TEXTGEN_VERSION=v1.3.1
 
 # Start as root
 USER root
